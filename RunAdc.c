@@ -18,6 +18,8 @@
 #define REFERENCE_VOLTAGE_V 3.3
 #define MAX_NUMBEROF_DIGITS 4095
 
+#define INITIAL_TIMER_DELAY_MS 100
+
 static float currentAdcValue_Volt;
 
 static struct timer_list my_timer;
@@ -80,7 +82,7 @@ static int __init my_module_init(void) {
     char buf[16];
 
     timer_setup(&my_timer, read_ain4, 0);
-    ret = mod_timer(&my_timer, jiffies + msecs_to_jiffies(10));
+    ret = mod_timer(&my_timer, jiffies + msecs_to_jiffies(INITIAL_TIMER_DELAY_MS));
 
     if (ret)
         printk(KERN_ALERT "Failed to initialize timer\n");
@@ -88,9 +90,9 @@ static int __init my_module_init(void) {
 
     // Register the AIN4 device
     ret = misc_register(&ain4_device);
-    if (ret) {ain4_device
+    if (ret) {
         pr_err("Failed to register AIN4 device\n");
-        misc_deregister(&pain4_device);
+        misc_deregister(&ain4_device);
 
         return ret;
     }
