@@ -12,26 +12,13 @@
 
 
 #define AIN4_PATH "/sys/bus/iio/devices/iio:device0/in_voltage4_raw"
-#define PWM_PERIOD_NS 1000000  // 1ms period (1kHz frequency)
-#define PWM_PATH "/sys/class/pwm/pwmchip5/pwm0"
+
+static float currentAdcValue_Volt;
 
 static struct timer_list my_timer;
 static int pwm_duty_cycle = 0;
 
 
-static int run_shell_command(const char *command) {
-    struct subprocess_info *sub_info;
-    char *argv[] = { "/bin/sh", "-c", (char *)command, NULL };
-    char *envp[] = { "HOME=/", "PATH=/sbin:/bin:/usr/sbin:/usr/bin", NULL };
-
-    sub_info = call_usermodehelper_setup(argv[0], argv, envp, GFP_KERNEL, NULL, NULL, NULL);
-    if (sub_info == NULL) {
-        pr_err("Failed to setup usermodehelper\n");
-        return -ENOMEM;
-    }
-
-    return call_usermodehelper_exec(sub_info, UMH_WAIT_PROC);
-}
 static void __exit my_module_exit(void) {
     struct file *f;
     char buf[16];
