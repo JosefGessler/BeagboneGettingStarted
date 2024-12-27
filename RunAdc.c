@@ -47,7 +47,7 @@ static void read_ain4(struct timer_list *t) {
 
 static ssize_t read_voltage(struct file* file, char __user* buffer, size_t count, loff_t* ppos) {
    
-    char adc_str[32];
+    char adc_str[16];
 
     snprintf(adc_str, sizeof(adc_str), "%d\n", AdcValue_milliVolt);
 
