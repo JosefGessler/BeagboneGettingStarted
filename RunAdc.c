@@ -15,7 +15,7 @@
 
 #define INITIAL_TIMER_DELAY_MS 100
 
-static int currentAdcValue_milliVolt;
+static int AdcValue_milliVolt;
 
 static struct timer_list my_timer;
 
@@ -34,7 +34,7 @@ static void read_ain4(struct timer_list *t) {
         kernel_read(f, buf, sizeof(buf) - 1, &f->f_pos);
         buf[sizeof(buf) - 1] = '\0';
         ain4_value_digits = simple_strtol(buf, NULL, 10);
-        currentAdcValue_Volt = (ain4_value_digits*1000 * REFERENCE_VOLTAGE_V) / (MAX_NUMBEROF_DIGITS-1);
+        AdcValue_milliVolt = (ain4_value_digits*1000 * REFERENCE_VOLTAGE_V) / (MAX_NUMBEROF_DIGITS-1);
         filp_close(f, NULL);
     }
     set_fs(fs);
@@ -49,7 +49,7 @@ static ssize_t read_voltage(struct file* file, char __user* buffer, size_t count
    
     char adc_str[32];
 
-    snprintf(adc_str, sizeof(adc_str), "%d\n", currentAdcValue_Volt);
+    snprintf(adc_str, sizeof(adc_str), "%d\n", AdcValue_milliVolt);
 
     if (copy_to_user(buffer, adc_str, strlen(adc_str)) != 0) {
         return -EFAULT;
