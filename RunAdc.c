@@ -9,11 +9,6 @@
 
 #include <linux/timer.h>
 
-
-
-//this module starts the PWM
-
-
 #define AIN4_PATH "/sys/bus/iio/devices/iio:device0/in_voltage4_raw"
 #define REFERENCE_VOLTAGE_V 3.3
 #define MAX_NUMBEROF_DIGITS 4095
@@ -76,7 +71,7 @@ static struct miscdevice ain4_device = {
     .fops = &ain4_fops,
 };
 
-static int __init my_module_init(void) {
+static int __init RunAdc_init(void) {
     int ret;
     struct file *f;
 
@@ -103,7 +98,7 @@ static int __init my_module_init(void) {
 }
 
 
-static void __exit my_module_exit(void) {
+static void __exit RunAdc_exit(void) {
     struct file* f;
 
     del_timer(&my_timer);
@@ -117,9 +112,9 @@ static void __exit my_module_exit(void) {
 }
 
 
-module_init(my_module_init);
-module_exit(my_module_exit);
+module_init(RunAdc_init);
+module_exit(RunAdc_exit);
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Josef Gessler");
-MODULE_DESCRIPTION("Reads the ADC and offers an Interface to poll the current valeu");
+MODULE_DESCRIPTION("Reads the ADC and offers an Interface to retrieve the voltage ");
