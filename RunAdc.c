@@ -10,7 +10,7 @@
 #include <linux/timer.h>
 
 #define AIN4_PATH "/sys/bus/iio/devices/iio:device0/in_voltage4_raw"
-#define REFERENCE_VOLTAGE_V 3.3
+#define REFERENCE_VOLTAGE_mV 3300
 #define MAX_NUMBEROF_DIGITS 4095
 
 #define INITIAL_TIMER_DELAY_MS 100
@@ -34,7 +34,7 @@ static void read_ain4(struct timer_list *t) {
         kernel_read(f, buf, sizeof(buf) - 1, &f->f_pos);
         buf[sizeof(buf) - 1] = '\0';
         ain4_value_digits = simple_strtol(buf, NULL, 10);
-        AdcValue_milliVolt = (ain4_value_digits*1000 * REFERENCE_VOLTAGE_V) / (MAX_NUMBEROF_DIGITS-1);
+        AdcValue_milliVolt = (ain4_value_digits* REFERENCE_VOLTAGE_mV) / (MAX_NUMBEROF_DIGITS-1);
         filp_close(f, NULL);
     }
     set_fs(fs);
