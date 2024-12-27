@@ -39,7 +39,7 @@ static void read_ain4(struct timer_list *t) {
         kernel_read(f, buf, sizeof(buf) - 1, &f->f_pos);
         buf[sizeof(buf) - 1] = '\0';
         ain4_value_digits = simple_strtol(buf, NULL, 10);
-        currentAdcValue_Volt = ain4_value_digits * REFERENCE_VOLTAGE_V / (NUMBEROF_DIGITS-1);
+        currentAdcValue_Volt = ain4_value_digits * REFERENCE_VOLTAGE_V / (MAX_NUMBEROF_DIGITS-1);
         filp_close(f, NULL);
     }
     set_fs(fs);
@@ -79,7 +79,6 @@ static struct miscdevice ain4_device = {
 static int __init my_module_init(void) {
     int ret;
     struct file *f;
-    char buf[16];
 
     timer_setup(&my_timer, read_ain4, 0);
     ret = mod_timer(&my_timer, jiffies + msecs_to_jiffies(INITIAL_TIMER_DELAY_MS));
@@ -106,7 +105,7 @@ static int __init my_module_init(void) {
 
 static void __exit my_module_exit(void) {
     struct file* f;
-    char buf[16];
+
     del_timer(&my_timer);
 
 
@@ -122,5 +121,5 @@ module_init(my_module_init);
 module_exit(my_module_exit);
 
 MODULE_LICENSE("GPL");
-MODULE_AUTHOR("Josef Gessler);
+MODULE_AUTHOR("Josef Gessler");
 MODULE_DESCRIPTION("Reads the ADC and offers an Interface to poll the current valeu");
