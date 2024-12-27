@@ -4,11 +4,11 @@
 #include <linux/fs.h>
 #include <linux/uaccess.h>
 #include <linux/io.h>
-#include <linux/platform_device.h>
+
 #include <linux/miscdevice.h>
-#include <linux/slab.h>
+
 #include <linux/timer.h>
-#include <linux/kmod.h>  // Needed for call_usermodehelper
+
 
 
 //this module starts the PWM
