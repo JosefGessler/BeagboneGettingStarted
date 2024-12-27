@@ -44,22 +44,23 @@ static void read_ain4(struct timer_list *t) {
     set_fs(fs);
 
     // Restart the timer
-    mod_timer(&my_timer, jiffies + msecs_to_jiffies(INITIAL_TIMER_DELAY_MS)));
+    mod_timer(&my_timer, jiffies + msecs_to_jiffies(INITIAL_TIMER_DELAY_MS));
 
 }
 
 
 static ssize_t read_voltage(struct file* file, char __user* buffer, size_t count, loff_t* ppos) {
    
-    char adc_str[16];
+    char adc_str[32];
     int value;
+    int length;
     value = AdcValue_milliVolt;
-    snprintf(adc_str, sizeof(adc_str), "%d\n", value);
+    length = snprintf(adc_str, sizeof(adc_str), "%d\n", value);
 
-    if (copy_to_user(buffer, adc_str, strlen(adc_str)) != 0) {
+    if (copy_to_user(buffer, adc_str, length ) != 0) {
         return -EFAULT;
     }
-    return strlen(adc_str);
+    return strlen(length);
 }
 
 
